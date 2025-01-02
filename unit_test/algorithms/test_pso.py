@@ -9,7 +9,7 @@ if current_directory not in sys.path:
     sys.path.append(current_directory)
 
 from src.core import vmap, Problem, use_state, jit
-from src.workflows import StdWorkflow 
+from src.workflows import StdWorkflow
 from src.algorithms import PSO
 
 
@@ -29,16 +29,14 @@ if __name__ == "__main__":
     workflow.setup(algo, prob)
     workflow.init_step()
     workflow.step()
-    # with open("tests/a.md", "w") as ff:
-    #     ff.write(workflow.step.inlined_graph.__str__())
+
     state_step = use_state(lambda: workflow.step)
     vmap_state_step = vmap(state_step)
     print(vmap_state_step.init_state(2))
     state = state_step.init_state()
     jit_state_step = jit(state_step, trace=True, example_inputs=(state,))
     state = state_step.init_state()
-    # with open("tests/b.md", "w") as ff:
-    #     ff.write(jit_state_step.inlined_graph.__str__())
+
     t = time.time()
     with profile(
         activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True, profile_memory=True
