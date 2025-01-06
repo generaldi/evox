@@ -4,6 +4,7 @@ from torch.profiler import profile, ProfilerActivity
 
 import os
 import sys
+
 current_directory = os.getcwd()
 if current_directory not in sys.path:
     sys.path.append(current_directory)
@@ -14,6 +15,7 @@ from src.algorithms import PSO
 
 
 if __name__ == "__main__":
+
     class Sphere(Problem):
         def __init__(self):
             super().__init__()
@@ -39,7 +41,9 @@ if __name__ == "__main__":
 
     t = time.time()
     with profile(
-        activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True, profile_memory=True
+        activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+        record_shapes=True,
+        profile_memory=True,
     ) as prof:
         for _ in range(1000):
             workflow.step()
@@ -47,7 +51,9 @@ if __name__ == "__main__":
     torch.cuda.synchronize()
     t = time.time()
     with profile(
-        activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True, profile_memory=True
+        activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+        record_shapes=True,
+        profile_memory=True,
     ) as prof:
         for _ in range(1000):
             state = jit_state_step(state)
